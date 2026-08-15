@@ -1,4 +1,4 @@
-const CACHE = "video-pwa-v1";
+const CACHE = "video-pwa-v2";
 const ASSETS = [
   "./",
   "./index.html",
