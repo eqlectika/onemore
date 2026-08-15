@@ -1,7 +1,6 @@
 const $ = id => document.getElementById(id);
 
 const state = {
-  generator: "Google Veo",
   prompt: localStorage.getItem("videoPrompt") || "",
   duration: localStorage.getItem("videoDuration") || "8",
   ratio: localStorage.getItem("videoRatio") || "16:9"
@@ -17,7 +16,7 @@ function saveState() {
   localStorage.setItem("videoRatio", $("ratio").value);
 }
 
-["prompt","duration","ratio"].forEach(id => {
+["prompt", "duration", "ratio"].forEach(id => {
   $(id).addEventListener("input", saveState);
   $(id).addEventListener("change", saveState);
 });
@@ -25,21 +24,63 @@ function saveState() {
 function updateConnection() {
   $("connection").textContent = navigator.onLine ? "ONLINE" : "OFFLINE READY";
 }
+
 window.addEventListener("online", updateConnection);
 window.addEventListener("offline", updateConnection);
 updateConnection();
 
-$("generate").addEventListener("click", () => {
+$("generate").addEventListener("click", async () => {
   saveState();
+
   const prompt = $("prompt").value.trim();
+  const durationSeconds = Number($("duration").value);
+  const aspectRatio = $("ratio").value;
+  const button = $("generate");
 
   if (!prompt) {
     $("message").textContent = "Enter a prompt first.";
     return;
   }
 
-  $("message").textContent =
-    "Generator connection will be added in the next step.";
+  button.disabled = true;
+  $("message").textContent = "Connecting to Local Node...";
+  $("resultBox").innerHTML = "<span>Generating video...</span>";
+
+  try {
+    const response = await fetch("http://127.0.0.1:8787/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        provider: "google-veo",
+        prompt,
+        durationSeconds,
+        aspectRatio
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Generation failed.");
+    }
+
+    if (!data.uri) {
+      throw new Error("No video URI returned.");
+    }
+
+    $("resultBox").innerHTML =
+      `<video controls playsinline src="${data.uri}"></video>`;
+
+    $("message").textContent = "Video generated.";
+
+  } catch (error) {
+    console.error(error);
+    $("resultBox").innerHTML = "<span>Generation failed.</span>";
+    $("message").textContent = error.message;
+
+  } finally {
+    button.disabled = false;
+  }
 });
 
 if ("serviceWorker" in navigator) {
