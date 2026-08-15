@@ -73,12 +73,35 @@ $("generate").addEventListener("click", async () => {
 
     $("message").textContent = "Video generated.";
 
-  } catch (error) {
-    console.error(error);
-    $("resultBox").innerHTML = "<span>Generation failed.</span>";
-    $("message").textContent = error.message;
+} catch (error) {
+  console.error(error);
 
-  } finally {
+  if (error.message.includes("429") ||
+      error.message.includes("RESOURCE_EXHAUSTED") ||
+      error.message.toLowerCase().includes("quota")) {
+
+    $("resultBox").innerHTML = `
+      <div class="generation-error">
+        <strong>Generator unavailable</strong>
+        <p>Google Veo has currently reached its API quota.</p>
+      </div>
+    `;
+
+    $("message").textContent = "Quota exceeded. Try again later.";
+
+  } else {
+
+    $("resultBox").innerHTML = `
+      <div class="generation-error">
+        <strong>Generation failed</strong>
+        <p>${error.message}</p>
+      </div>
+    `;
+
+    $("message").textContent = "Generation failed.";
+  }
+  
+  finally {
     button.disabled = false;
   }
 });
