@@ -73,35 +73,37 @@ $("generate").addEventListener("click", async () => {
 
     $("message").textContent = "Video generated.";
 
-} catch (error) {
-  console.error(error);
+  } catch (error) {
+    console.error(error);
 
-  if (error.message.includes("429") ||
-      error.message.includes("RESOURCE_EXHAUSTED") ||
-      error.message.toLowerCase().includes("quota")) {
+    const errorText = error.message || "";
 
-    $("resultBox").innerHTML = `
-      <div class="generation-error">
-        <strong>Generator unavailable</strong>
-        <p>Google Veo has currently reached its API quota.</p>
-      </div>
-    `;
+    if (
+      errorText.includes("429") ||
+      errorText.includes("RESOURCE_EXHAUSTED") ||
+      errorText.toLowerCase().includes("quota")
+    ) {
+      $("resultBox").innerHTML = `
+        <div class="generation-error">
+          <strong>Generator unavailable</strong>
+          <p>Google Veo has currently reached its API quota.</p>
+        </div>
+      `;
 
-    $("message").textContent = "Quota exceeded. Try again later.";
+      $("message").textContent = "Quota exceeded. Try again later.";
 
-  } else {
+    } else {
+      $("resultBox").innerHTML = `
+        <div class="generation-error">
+          <strong>Generation failed</strong>
+          <p>${errorText}</p>
+        </div>
+      `;
 
-    $("resultBox").innerHTML = `
-      <div class="generation-error">
-        <strong>Generation failed</strong>
-        <p>${error.message}</p>
-      </div>
-    `;
+      $("message").textContent = "Generation failed.";
+    }
 
-    $("message").textContent = "Generation failed.";
-  }
-  
-  finally {
+  } finally {
     button.disabled = false;
   }
 });
