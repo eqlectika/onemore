@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111">
+  <meta name="description" content="Minimal video generation PWA">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <title>Video Generator</title>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>CREATE VIDEO</h1>
+      <div id="connection" class="status">OFFLINE READY</div>
+    </header>
+
+    <section class="panel">
+      <label for="generator">Generator</label>
+      <select id="generator">
+        <option>Google Veo</option>
+      </select>
+
+      <label for="prompt">Prompt</label>
+      <textarea id="prompt" placeholder="Describe your video..."></textarea>
+
+      <div class="grid">
+        <div>
+          <label for="duration">Duration</label>
+          <select id="duration">
+            <option value="8">8 sec</option>
+            <option value="6">6 sec</option>
+            <option value="4">4 sec</option>
+          </select>
+        </div>
+        <div>
+          <label for="ratio">Aspect ratio</label>
+          <select id="ratio">
+            <option value="16:9">16:9</option>
+            <option value="9:16">9:16</option>
+            <option value="1:1">1:1</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="generate">Generate</button>
+      <p id="message" class="message"></p>
+    </section>
+
+    <section class="result">
+      <h2>RESULT</h2>
+      <div id="resultBox" class="result-box">
+        <span>No video generated yet.</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
