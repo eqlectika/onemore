@@ -33,16 +33,40 @@
     @media(max-width:520px){
       .app{padding-top:20px}
       .grid{grid-template-columns:1fr}
-      header{align-items:flex-start;flex-direction:column}
+
+.header-main {
+  display: flex;
+  align-items: center;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+#header-logo {
+  width: 34px;
+  margin-right: 10px;
+}
+
     }
   </style>
 </head>
 <body>
   <main class="app">
-    <header>
+
+<header>
+  <div class="header-main">
+    <a href="match.html">
+      <img src="star.png" id="header-logo">
+    </a>
+
+    <div class="header-text">
       <h1>CREATE VIDEO</h1>
       <div id="connection" class="status">OFFLINE READY</div>
-    </header>
+    </div>
+  </div>
+</header>
 
     <section class="panel">
       <label for="generator">Generator</label>
