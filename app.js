@@ -3,20 +3,23 @@ const $ = id => document.getElementById(id);
 const state = {
   prompt: localStorage.getItem("videoPrompt") || "",
   duration: localStorage.getItem("videoDuration") || "8",
-  ratio: localStorage.getItem("videoRatio") || "16:9"
+  ratio: localStorage.getItem("videoRatio") || "16:9",
+  generator: localStorage.getItem("videoGenerator") || "google-veo"
 };
 
 $("prompt").value = state.prompt;
 $("duration").value = state.duration;
 $("ratio").value = state.ratio;
+$("generator").value = state.generator;
 
 function saveState() {
   localStorage.setItem("videoPrompt", $("prompt").value);
   localStorage.setItem("videoDuration", $("duration").value);
   localStorage.setItem("videoRatio", $("ratio").value);
+  localStorage.setItem("videoGenerator", $("generator").value);
 }
 
-["prompt", "duration", "ratio"].forEach(id => {
+["prompt", "duration", "ratio", "generator"].forEach(id => {
   $(id).addEventListener("input", saveState);
   $(id).addEventListener("change", saveState);
 });
@@ -35,6 +38,7 @@ $("generate").addEventListener("click", async () => {
   const prompt = $("prompt").value.trim();
   const durationSeconds = Number($("duration").value);
   const aspectRatio = $("ratio").value;
+  const provider = $("generator").value;
   const button = $("generate");
 
   if (!prompt) {
@@ -51,7 +55,7 @@ $("generate").addEventListener("click", async () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        provider: "google-veo",
+        provider,
         prompt,
         durationSeconds,
         aspectRatio
@@ -86,7 +90,7 @@ $("generate").addEventListener("click", async () => {
       $("resultBox").innerHTML = `
         <div class="generation-error">
           <strong>Generator unavailable</strong>
-          <p>Google Veo has currently reached its API quota.</p>
+          <p>Selected generator has currently reached its API quota.</p>
         </div>
       `;
 
