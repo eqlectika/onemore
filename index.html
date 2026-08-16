@@ -16,15 +16,15 @@
     header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:24px}
     h1,h2{margin:0;font-size:18px;font-weight:600;letter-spacing:.08em}
     h2{font-size:14px}
-    .status{font-size:11px;letter-spacing:.08em;opacity:.55}
-    /* Убраны внешние рамки и уменьшены отступы для панелей */
+    .status{color: #ccc; font-size:11px;letter-spacing:.08em;}
+
     .panel,.result{padding:0 0 18px;margin-bottom:18px}
-    label{display:block;font-size:12px;opacity:.65;margin:0 0 7px}
-    select,textarea{width:100%;border:1px solid #444;border-radius:9px;background:#181818;color:#eee;font:inherit;padding:12px;outline:none}
+    label{display:block;font-size:12px;opacity:.65;margin:12px 0 7px}
+    select,textarea,input{width:100%;border:1px solid #444;border-radius:9px;background:#181818;color:#eee;font:inherit;padding:12px;outline:none}
     select:focus,textarea:focus{border-color:#777}
     textarea{min-height:150px;resize:vertical;margin-bottom:18px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
-    button{width:100%;padding:13px;border:0;border-radius:9px;background:#eee;color:#111;font:600 14px inherit;cursor:pointer}
+    button{width:100%;padding:13px;border:1;border-radius:9px;background:#000;color:#fff;font:600 14px inherit;cursor:pointer}
     button:active{transform:scale(.99)}
     button:disabled{opacity:.45;cursor:default}
     .message{min-height:18px;margin:12px 0 0;font-size:12px;opacity:.65}
@@ -63,16 +63,24 @@
 
     <div class="header-text">
       <h1>CREATE VIDEO</h1>
-      <div id="connection" class="status">OFFLINE READY</div>
+      <div id="connection" class="status">Offline ready</div>
     </div>
   </div>
 </header>
 
-    <section class="panel">
+<section class="panel">
       <label for="generator">Generator</label>
       <select id="generator">
-        <option>Google Veo</option>
-      </select>
+  <option value="veo">Google Veo</option>
+</select>
+
+<label for="apiKey">API Key</label>
+<input
+  id="apiKey"
+  type="password"
+  placeholder="Paste your API key..."
+  autocomplete="off"
+>
 
       <label for="prompt">Prompt</label>
       <textarea id="prompt" placeholder="Describe your video..."></textarea>
