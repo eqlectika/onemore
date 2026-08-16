@@ -82,31 +82,43 @@ $("generate").addEventListener("click", async () => {
 
     const errorText = error.message || "";
 
-    if (
-      errorText.includes("429") ||
-      errorText.includes("RESOURCE_EXHAUSTED") ||
-      errorText.toLowerCase().includes("quota")
-    ) {
-      $("resultBox").innerHTML = `
-        <div class="generation-error">
-          <strong>Generator unavailable</strong>
-          <p>Selected generator has currently reached its API quota.</p>
-        </div>
-      `;
+    if (provider === "magic-hour" && errorText.includes("402")) {
+  $("resultBox").innerHTML = `
+    <div class="generation-error">
+      <strong>Insufficient Magic Hour credits</strong>
+      <p>Please add credits to continue.</p>
+    </div>
+  `;
 
-      $("message").textContent = "Quota exceeded. Try again later.";
+  $("message").textContent = "Insufficient Magic Hour credits.";
 
-    } else {
-      $("resultBox").innerHTML = `
-        <div class="generation-error">
-          <strong>Generation failed</strong>
-          <p>${errorText}</p>
-        </div>
-      `;
+} else if (
+  provider === "google-veo" &&
+  (
+    errorText.includes("429") ||
+    errorText.includes("RESOURCE_EXHAUSTED") ||
+    errorText.toLowerCase().includes("quota")
+  )
+) {
+  $("resultBox").innerHTML = `
+    <div class="generation-error">
+      <strong>Google Veo quota exceeded</strong>
+      <p>Please try again later.</p>
+    </div>
+  `;
 
-      $("message").textContent = "Generation failed.";
-    }
+  $("message").textContent = "Google Veo quota exceeded.";
 
+} else {
+  $("resultBox").innerHTML = `
+    <div class="generation-error">
+      <strong>Generation failed</strong>
+      <p>${errorText}</p>
+    </div>
+  `;
+
+  $("message").textContent = "Generation failed.";
+}
   } finally {
     button.disabled = false;
   }
